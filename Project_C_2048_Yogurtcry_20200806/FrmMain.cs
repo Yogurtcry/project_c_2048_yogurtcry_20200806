@@ -419,13 +419,19 @@ namespace Project_C_2048_Yogurtcry_20200806
             }
 
             // Step 3 旋转输出结果
+            int outputRowIndex;
+            int outputColumnIndex;
+            outputRowIndex = 0;
             for (int columnIndex = 0; columnIndex <= 3; columnIndex++)
             {
+                outputColumnIndex = 0;
                 for (int rowIndex = 0; rowIndex <= 3; rowIndex++)
                 {
-                    int currentLabelNumber = currentLabelNumberArray[columnIndex][rowIndex];
-                    resultLabelNumberArray[rowIndex][columnIndex] = currentLabelNumber;
+                    int currentLabelNumber = currentLabelNumberArray[rowIndex][columnIndex];
+                    resultLabelNumberArray[outputRowIndex][outputColumnIndex] = currentLabelNumber;
+                    outputColumnIndex += 1;
                 }
+                outputRowIndex += 1;
             }
 
             return resultLabelNumberArray;
