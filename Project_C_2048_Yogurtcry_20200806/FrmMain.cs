@@ -401,24 +401,40 @@ namespace Project_C_2048_Yogurtcry_20200806
             
             // Step 2 输出结果计算
             List<List<int>> calculateLabelNumberArray = new List<List<int>>();
-            for (int rowIndex = 0; rowIndex <= 3; rowIndex ++) {
+            for (int columnIndex = 0; columnIndex <= 3; columnIndex ++) {
                 // --> Step 2-1 去除空值
                 List<int> calculateLabelNumberList = new List<int>();
-                for (int columnIndex = 0; columnIndex <= 3; columnIndex ++) {
+                for (int rowIndex = 0; rowIndex <= 3; rowIndex ++) {
                     int currentLabelNumber = currentLabelNumberArray[rowIndex][columnIndex];
                     if (currentLabelNumber > 0) {
                         calculateLabelNumberList.Add(currentLabelNumber);
                     }
                 }
                 int calculateLabelNumberListCount = calculateLabelNumberList.Count;
-                for (int columnIndex = 0; columnIndex < (4 - calculateLabelNumberListCount); columnIndex++)
+                for (int rowIndex = 0; rowIndex < (4 - calculateLabelNumberListCount); rowIndex++)
                 {
                     calculateLabelNumberList.Add(0);
                 }
                 calculateLabelNumberArray.Add(calculateLabelNumberList);
             }
 
-            return calculateLabelNumberArray;
+            // Step 3 旋转输出结果
+            int outputRowIndex;
+            int outputColumnIndex;
+            outputRowIndex = 0;
+            for (int columnIndex = 0; columnIndex <= 3; columnIndex++)
+            {
+                outputColumnIndex = 0;
+                for (int rowIndex = 0; rowIndex <= 3; rowIndex++)
+                {
+                    int currentLabelNumber = currentLabelNumberArray[rowIndex][columnIndex];
+                    resultLabelNumberArray[outputRowIndex][outputColumnIndex] = currentLabelNumber;
+                    outputColumnIndex += 1;
+                }
+                outputRowIndex += 1;
+            }
+
+            return resultLabelNumberArray;
             // int startRowIndex = 0;
             // int endRowIndex = 0;
             // int startColumnIndex = 0;
