@@ -1,12 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Project_C_2048_Yogurtcry_20200806
@@ -162,86 +156,7 @@ namespace Project_C_2048_Yogurtcry_20200806
         }
         #endregion
 
-        private void FrmMain_KeyDown(object sender, KeyEventArgs e)
-        {
-            string beforeCalculateLabelNumberArrayString = ClassCalculate.GetCurrentLabelNumberString(GetCurrentLabelNumberArray());
-
-            // 执行标签数字计算
-            if (e.KeyCode == Keys.Up || e.KeyCode == Keys.W)
-            {
-                RefleshCalculate(LabelNumberCalculate(0, LABELARRAY));
-            }
-            else if (e.KeyCode == Keys.Left || e.KeyCode == Keys.A)
-            {
-                RefleshCalculate(LabelNumberCalculate(1, LABELARRAY));
-            }
-            else if (e.KeyCode == Keys.Down || e.KeyCode == Keys.S)
-            {
-                RefleshCalculate(LabelNumberCalculate(2, LABELARRAY));
-            }
-            else if (e.KeyCode == Keys.Right || e.KeyCode == Keys.D)
-            {
-                RefleshCalculate(LabelNumberCalculate(3, LABELARRAY));
-            }
-
-            // 创建新数字
-            List<List<int>> afterCalculateLabelNumberArray = GetCurrentLabelNumberArray();
-            string afterCalculateLabelNumberArrayString = ClassCalculate.GetCurrentLabelNumberString(afterCalculateLabelNumberArray);
-            if (beforeCalculateLabelNumberArrayString != afterCalculateLabelNumberArrayString)
-            {
-                RefleshCalculate(RandomNewNumberTwoOrFour());
-            }
-            
-            // 检验游戏是否结束
-            int endGameState = 0;
-            for (int rowIndex = 0; rowIndex <= 3; rowIndex ++)
-            {
-                for (int columnIndex = 0; columnIndex <= 3; columnIndex ++)
-                {
-                    int currentLabelNumber = afterCalculateLabelNumberArray[rowIndex][columnIndex];
-                    if (currentLabelNumber == 0) {
-                        endGameState += 1;
-                    }
-
-                    if (rowIndex > 0)
-                    {
-                        if (currentLabelNumber == afterCalculateLabelNumberArray[rowIndex - 1][columnIndex])
-                        {
-                            endGameState += 1;
-                        }
-                    }
-                    else
-                    {
-                        if (currentLabelNumber == afterCalculateLabelNumberArray[rowIndex + 1][columnIndex])
-                        {
-                            endGameState += 1;
-                        }
-                    }
-
-                    if (columnIndex > 0)
-                    {
-                        if (currentLabelNumber == afterCalculateLabelNumberArray[rowIndex][columnIndex - 1])
-                        {
-                            endGameState += 1;
-                        }
-                    }
-                    else
-                    {
-                        if (currentLabelNumber == afterCalculateLabelNumberArray[rowIndex][columnIndex + 1])
-                        {
-                            endGameState += 1;
-                        }
-                    }
-                }
-            }
-            // 1. 判断上下左右四个方位是否与当前值一致, 如果一致则说明还有可以合并的地方
-            // 2. 判断当前位置是否为空(0), 如果为空(0)则说明还可以继续创建新数字
-            if (endGameState == 0)
-            {
-                btnRestart.Show();
-            }
-        }
-
+        #region 函数 - 标签控件计算
         /// <summary>
         /// 函数 - 标签控件计算
         /// </summary>
@@ -441,6 +356,88 @@ namespace Project_C_2048_Yogurtcry_20200806
                 #endregion
             }
         }
+        #endregion
+
+        #region 控制事件
+        private void FrmMain_KeyDown(object sender, KeyEventArgs e)
+        {
+            string beforeCalculateLabelNumberArrayString = ClassCalculate.GetCurrentLabelNumberString(GetCurrentLabelNumberArray());
+
+            // 执行标签数字计算
+            if (e.KeyCode == Keys.Up || e.KeyCode == Keys.W)
+            {
+                RefleshCalculate(LabelNumberCalculate(0, LABELARRAY));
+            }
+            else if (e.KeyCode == Keys.Left || e.KeyCode == Keys.A)
+            {
+                RefleshCalculate(LabelNumberCalculate(1, LABELARRAY));
+            }
+            else if (e.KeyCode == Keys.Down || e.KeyCode == Keys.S)
+            {
+                RefleshCalculate(LabelNumberCalculate(2, LABELARRAY));
+            }
+            else if (e.KeyCode == Keys.Right || e.KeyCode == Keys.D)
+            {
+                RefleshCalculate(LabelNumberCalculate(3, LABELARRAY));
+            }
+
+            // 创建新数字
+            List<List<int>> afterCalculateLabelNumberArray = GetCurrentLabelNumberArray();
+            string afterCalculateLabelNumberArrayString = ClassCalculate.GetCurrentLabelNumberString(afterCalculateLabelNumberArray);
+            if (beforeCalculateLabelNumberArrayString != afterCalculateLabelNumberArrayString)
+            {
+                RefleshCalculate(RandomNewNumberTwoOrFour());
+            }
+            
+            // 检验游戏是否结束
+            int endGameState = 0;
+            for (int rowIndex = 0; rowIndex <= 3; rowIndex ++)
+            {
+                for (int columnIndex = 0; columnIndex <= 3; columnIndex ++)
+                {
+                    int currentLabelNumber = afterCalculateLabelNumberArray[rowIndex][columnIndex];
+                    if (currentLabelNumber == 0) {
+                        endGameState += 1;
+                    }
+
+                    if (rowIndex > 0)
+                    {
+                        if (currentLabelNumber == afterCalculateLabelNumberArray[rowIndex - 1][columnIndex])
+                        {
+                            endGameState += 1;
+                        }
+                    }
+                    else
+                    {
+                        if (currentLabelNumber == afterCalculateLabelNumberArray[rowIndex + 1][columnIndex])
+                        {
+                            endGameState += 1;
+                        }
+                    }
+
+                    if (columnIndex > 0)
+                    {
+                        if (currentLabelNumber == afterCalculateLabelNumberArray[rowIndex][columnIndex - 1])
+                        {
+                            endGameState += 1;
+                        }
+                    }
+                    else
+                    {
+                        if (currentLabelNumber == afterCalculateLabelNumberArray[rowIndex][columnIndex + 1])
+                        {
+                            endGameState += 1;
+                        }
+                    }
+                }
+            }
+            // 1. 判断上下左右四个方位是否与当前值一致, 如果一致则说明还有可以合并的地方
+            // 2. 判断当前位置是否为空(0), 如果为空(0)则说明还可以继续创建新数字
+            if (endGameState == 0)
+            {
+                btnRestart.Show();
+            }
+        }
 
         private void BtnRestart_Click(object sender, EventArgs e)
         {
@@ -448,5 +445,6 @@ namespace Project_C_2048_Yogurtcry_20200806
             RefleshCalculate(RandomNewNumberTwoOrFour());
             ((Button)sender).Hide();
         }
+        #endregion
     }
 }
