@@ -49,12 +49,10 @@
             this.lbl13 = new System.Windows.Forms.Label();
             this.lbl23 = new System.Windows.Forms.Label();
             this.lbl33 = new System.Windows.Forms.Label();
-            this.pnlGameControl = new System.Windows.Forms.Panel();
-            this.btnRestart = new System.Windows.Forms.Button();
             this.lblGameRemark = new System.Windows.Forms.Label();
+            this.btnRestart = new System.Windows.Forms.Button();
             this.pnlGameInfo.SuspendLayout();
             this.pnlGameArea.SuspendLayout();
-            this.pnlGameControl.SuspendLayout();
             this.SuspendLayout();
             // 
             // pnlGameInfo
@@ -329,32 +327,6 @@
             this.lbl33.TabIndex = 16;
             this.lbl33.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // pnlGameControl
-            // 
-            this.pnlGameControl.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(251)))), ((int)(((byte)(248)))), ((int)(((byte)(241)))));
-            this.pnlGameControl.Controls.Add(this.btnRestart);
-            this.pnlGameControl.Location = new System.Drawing.Point(438, 175);
-            this.pnlGameControl.Name = "pnlGameControl";
-            this.pnlGameControl.Size = new System.Drawing.Size(350, 350);
-            this.pnlGameControl.TabIndex = 20;
-            this.pnlGameControl.Visible = false;
-            // 
-            // btnRestart
-            // 
-            this.btnRestart.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(186)))), ((int)(((byte)(172)))), ((int)(((byte)(162)))));
-            this.btnRestart.FlatAppearance.BorderSize = 0;
-            this.btnRestart.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(186)))), ((int)(((byte)(172)))), ((int)(((byte)(162)))));
-            this.btnRestart.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(204)))), ((int)(((byte)(192)))), ((int)(((byte)(178)))));
-            this.btnRestart.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnRestart.Font = new System.Drawing.Font("微软雅黑", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.btnRestart.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(251)))), ((int)(((byte)(248)))), ((int)(((byte)(241)))));
-            this.btnRestart.Location = new System.Drawing.Point(88, 135);
-            this.btnRestart.Name = "btnRestart";
-            this.btnRestart.Size = new System.Drawing.Size(180, 80);
-            this.btnRestart.TabIndex = 31;
-            this.btnRestart.Text = "重新开始";
-            this.btnRestart.UseVisualStyleBackColor = false;
-            // 
             // lblGameRemark
             // 
             this.lblGameRemark.BackColor = System.Drawing.Color.Transparent;
@@ -369,18 +341,36 @@
             this.lblGameRemark.Text = "使用 W、A、S、D 或  方向键  移动色块，组合成更大的数字";
             this.lblGameRemark.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // btnRestart
+            // 
+            this.btnRestart.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(186)))), ((int)(((byte)(172)))), ((int)(((byte)(162)))));
+            this.btnRestart.FlatAppearance.BorderSize = 0;
+            this.btnRestart.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(186)))), ((int)(((byte)(172)))), ((int)(((byte)(162)))));
+            this.btnRestart.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(204)))), ((int)(((byte)(192)))), ((int)(((byte)(178)))));
+            this.btnRestart.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnRestart.Font = new System.Drawing.Font("微软雅黑", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnRestart.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(251)))), ((int)(((byte)(248)))), ((int)(((byte)(241)))));
+            this.btnRestart.Location = new System.Drawing.Point(152, 310);
+            this.btnRestart.Name = "btnRestart";
+            this.btnRestart.Size = new System.Drawing.Size(180, 80);
+            this.btnRestart.TabIndex = 32;
+            this.btnRestart.Text = "开始游戏";
+            this.btnRestart.UseVisualStyleBackColor = false;
+            this.btnRestart.Click += new System.EventHandler(this.BtnRestart_Click);
+            // 
             // FrmMain
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(251)))), ((int)(((byte)(248)))), ((int)(((byte)(241)))));
             this.ClientSize = new System.Drawing.Size(484, 641);
+            this.Controls.Add(this.btnRestart);
             this.Controls.Add(this.lblGameRemark);
-            this.Controls.Add(this.pnlGameControl);
             this.Controls.Add(this.pnlGameArea);
             this.Controls.Add(this.pnlGameInfo);
             this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("微软雅黑", 9F);
             this.ImeMode = System.Windows.Forms.ImeMode.Off;
+            this.KeyPreview = true;
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(500, 680);
@@ -393,7 +383,6 @@
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.FrmMain_KeyDown);
             this.pnlGameInfo.ResumeLayout(false);
             this.pnlGameArea.ResumeLayout(false);
-            this.pnlGameControl.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -404,8 +393,6 @@
         private System.Windows.Forms.Label lblGameScore;
         private System.Windows.Forms.Label lblGameName;
         private System.Windows.Forms.Panel pnlGameArea;
-        private System.Windows.Forms.Panel pnlGameControl;
-        private System.Windows.Forms.Button btnRestart;
         private System.Windows.Forms.Label lbl00;
         private System.Windows.Forms.Label lbl10;
         private System.Windows.Forms.Label lbl20;
@@ -423,6 +410,7 @@
         private System.Windows.Forms.Label lbl23;
         private System.Windows.Forms.Label lbl33;
         private System.Windows.Forms.Label lblGameRemark;
+        private System.Windows.Forms.Button btnRestart;
     }
 }
 

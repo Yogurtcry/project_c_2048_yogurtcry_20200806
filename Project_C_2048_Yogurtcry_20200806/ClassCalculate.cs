@@ -13,42 +13,6 @@ namespace Project_C_2048_Yogurtcry_20200806
     class ClassCalculate
     {
         /// <summary>
-        /// 标签控件移动事件 - 待删除
-        /// </summary>
-        /// <param name="labelMove">待移动标签控件</param>
-        /// <param name="direction">移动方向。0: 上下; 1: 左右;</param>
-        /// <param name="startMove">起始移动位置</param>
-        /// <param name="endMove">终止移动位置</param>
-        /// <param name="moveStep">移动步长</param>
-        public static int LabelMoveEvent(Label labelMove, int direction, int startMove, int endMove, int moveStep)
-        {
-            // 当『起始移动位置』大于『终止移动位置』时, 表示移动方向为反向移动
-            if (startMove > endMove)
-            {
-                startMove = -startMove;
-                endMove = -endMove;
-            }
-
-            for (int moveIndex = startMove; moveIndex <= endMove; moveIndex += moveStep)
-            {
-                if (direction == 0)
-                {
-                    // 当移动方向为 0 时, 表示上下移动
-                    labelMove.Top = Math.Abs(moveIndex);
-                }
-                else
-                {
-                    // 当移动方向为 1 时, 表示左右移动
-                    labelMove.Left = Math.Abs(moveIndex);
-                }
-                //Application.DoEvents();
-                Thread.Sleep(10);
-            }
-
-            return 0;
-        }
-
-        /// <summary>
         /// 获取标签控件样式
         /// </summary>
         /// <param name="calculateNumber"></param>
@@ -139,7 +103,8 @@ namespace Project_C_2048_Yogurtcry_20200806
         /// <param name="pnlGameArea"></param>
         /// <param name="labelArray"></param>
         /// <returns></returns>
-        public static List<List<int>> GetUsedNumberArray(Panel pnlGameArea, List<List<Label>> labelArray){
+        public static List<List<int>> GetUsedNumberArray(Panel pnlGameArea, List<List<Label>> labelArray)
+        {
             List<List<int>> resultUsedNumberArray = new List<List<int>>
             {
                 new List<int> { 0, 0, 0, 0},
@@ -181,5 +146,26 @@ namespace Project_C_2048_Yogurtcry_20200806
 
             return resultUsedNumberArray;
         }
+    
+        #region 函数 - 获取当前控件的值
+        /// <summary>
+        /// 获取当前控件的值
+        /// </summary>
+        /// <returns></returns>
+        public static string GetCurrentLabelNumberString(List<List<int>> labelArray)
+        {
+            string currentLabelNumber = string.Empty;
+            for (int rowIndex = 0; rowIndex < 4; rowIndex++)
+            {
+                for (int columnIndex = 0; columnIndex < 4; columnIndex++)
+                {
+                    int labelNumber = labelArray[rowIndex][columnIndex];
+                    currentLabelNumber += "|" + labelNumber.ToString();
+                }
+            }
+
+            return currentLabelNumber;
+        }
+        #endregion
     }
 }

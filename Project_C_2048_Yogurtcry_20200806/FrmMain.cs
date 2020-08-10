@@ -15,19 +15,6 @@ namespace Project_C_2048_Yogurtcry_20200806
     {
         private static List<List<Label>> LABELARRAY;
 
-        BackgroundWorker BACKGROUNDWORKERLABELMOVE0 = null;
-        BackgroundWorker BACKGROUNDWORKERLABELMOVE1 = null;
-        BackgroundWorker BACKGROUNDWORKERLABELMOVE2 = null;
-        BackgroundWorker BACKGROUNDWORKERLABELMOVE3 = null;
-
-        private static int KEYBOARDSTATE0 = 0;
-        private static int KEYBOARDSTATE1 = 0;
-        private static int KEYBOARDSTATE2 = 0;
-        private static int KEYBOARDSTATE3 = 0;
-        private static int KEYBOARDSTATEFULL = 0;
-
-        BackgroundWorker BACKGROUNDWORKERLABELNEWNUMBER = null;
-
         public FrmMain()
         {
             InitializeComponent();
@@ -177,196 +164,90 @@ namespace Project_C_2048_Yogurtcry_20200806
 
         private void FrmMain_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter)
+            string beforeCalculateLabelNumberArrayString = ClassCalculate.GetCurrentLabelNumberString(GetCurrentLabelNumberArray());
+
+            // 执行标签数字计算
+            if (e.KeyCode == Keys.Up || e.KeyCode == Keys.W)
             {
-                RefleshCalculate(RandomNewNumberTwoOrFour());;
-            }
-            else if (e.KeyCode == Keys.Up || e.KeyCode == Keys.W)
-            {
-                RefleshCalculate(LabelNumberCalculate(0, LABELARRAY));;
-                // RefleshCalculate(RandomNewNumberTwoOrFour());
+                RefleshCalculate(LabelNumberCalculate(0, LABELARRAY));
             }
             else if (e.KeyCode == Keys.Left || e.KeyCode == Keys.A)
             {
-                RefleshCalculate(LabelNumberCalculate(1, LABELARRAY));;
-                // RefleshCalculate(RandomNewNumberTwoOrFour());
+                RefleshCalculate(LabelNumberCalculate(1, LABELARRAY));
             }
             else if (e.KeyCode == Keys.Down || e.KeyCode == Keys.S)
             {
-                RefleshCalculate(LabelNumberCalculate(2, LABELARRAY));;
-                // RefleshCalculate(RandomNewNumberTwoOrFour());
+                RefleshCalculate(LabelNumberCalculate(2, LABELARRAY));
             }
             else if (e.KeyCode == Keys.Right || e.KeyCode == Keys.D)
             {
-                RefleshCalculate(LabelNumberCalculate(3, LABELARRAY));;
-                // RefleshCalculate(RandomNewNumberTwoOrFour());
+                RefleshCalculate(LabelNumberCalculate(3, LABELARRAY));
             }
-            #region 折叠
-            // int loopIndex = 0;
-            // for (loopIndex = 0; loopIndex <= 1; loopIndex ++)
-            // {
-            //     if (KEYBOARDSTATE0 + KEYBOARDSTATE1 + KEYBOARDSTATE2 + KEYBOARDSTATE3 + KEYBOARDSTATEFULL == 0)
-            //     {
-            //         loopIndex = 1;
-            //     }
-            //     else
-            //     {
-            //         loopIndex = 0;
-            //     }
-            //     Application.DoEvents();
-            // }
 
-            // if (KEYBOARDSTATE0 + KEYBOARDSTATE1 + KEYBOARDSTATE2 + KEYBOARDSTATE3 + KEYBOARDSTATEFULL == 0)
-            // {
-            //     if (e.KeyCode == Keys.Enter)
-            //     {
-            //         KEYBOARDSTATEFULL = 1;
+            // 创建新数字
+            List<List<int>> afterCalculateLabelNumberArray = GetCurrentLabelNumberArray();
+            string afterCalculateLabelNumberArrayString = ClassCalculate.GetCurrentLabelNumberString(afterCalculateLabelNumberArray);
+            if (beforeCalculateLabelNumberArrayString != afterCalculateLabelNumberArrayString)
+            {
+                RefleshCalculate(RandomNewNumberTwoOrFour());
+            }
+            
+            // 检验游戏是否结束
+            int endGameState = 0;
+            for (int rowIndex = 0; rowIndex <= 3; rowIndex ++)
+            {
+                for (int columnIndex = 0; columnIndex <= 3; columnIndex ++)
+                {
+                    int currentLabelNumber = afterCalculateLabelNumberArray[rowIndex][columnIndex];
+                    if (currentLabelNumber == 0) {
+                        endGameState += 1;
+                    }
 
-            //         BACKGROUNDWORKERLABELNEWNUMBER = new BackgroundWorker()
-            //         {
-            //             WorkerReportsProgress = true,
-            //             WorkerSupportsCancellation = true,
-            //         };
-            //         BACKGROUNDWORKERLABELNEWNUMBER.DoWork += BACKGROUNDWORKERLABELNEWNUMBER_DoWork;
-            //         BACKGROUNDWORKERLABELNEWNUMBER.ProgressChanged += BACKGROUNDWORKERLABELNEWNUMBER_ProgressChanged;
-            //         BACKGROUNDWORKERLABELNEWNUMBER.RunWorkerCompleted += BACKGROUNDWORKERLABELNEWNUMBER_RunWorkerCompleted;
+                    if (rowIndex > 0)
+                    {
+                        if (currentLabelNumber == afterCalculateLabelNumberArray[rowIndex - 1][columnIndex])
+                        {
+                            endGameState += 1;
+                        }
+                    }
+                    else
+                    {
+                        if (currentLabelNumber == afterCalculateLabelNumberArray[rowIndex + 1][columnIndex])
+                        {
+                            endGameState += 1;
+                        }
+                    }
 
-            //         List<List<int>> usedNumberArray = ClassCalculate.GetUsedNumberArray(pnlGameArea, LABELARRAY);
-            //         Dictionary<string, object> labelNewNumberInfoDict = new Dictionary<string, object>
-            //         {
-            //             { "usedNumberArray", usedNumberArray },
-            //             { "pnlGameArea", pnlGameArea }
-            //         };
-
-            //         BACKGROUNDWORKERLABELNEWNUMBER.RunWorkerAsync(labelNewNumberInfoDict);
-            //     }
-            //     else if (e.KeyCode == Keys.Up || e.KeyCode == Keys.W)
-            //     {
-            //         KEYBOARDSTATE0 = 1;
-            //         KEYBOARDSTATE1 = 1;
-            //         KEYBOARDSTATE2 = 1;
-            //         KEYBOARDSTATE3 = 1;
-
-            //         BACKGROUNDWORKERLABELMOVE0 = new BackgroundWorker()
-            //         {
-            //             WorkerReportsProgress = true,
-            //             WorkerSupportsCancellation = true,
-            //         };
-            //         BACKGROUNDWORKERLABELMOVE0.DoWork += BackgroundWorkerLabelMove_DoWork;
-            //         BACKGROUNDWORKERLABELMOVE0.ProgressChanged += BackgroundWorkerLabelMove_ProgressChanged;
-            //         BACKGROUNDWORKERLABELMOVE0.RunWorkerCompleted += BackgroundWorkerLabelMove_RunWorkerCompleted;
-            //         Dictionary<string, object> labelMoveInfoDict1 = new Dictionary<string, object>
-            //         {
-            //             { "labelMove", lblNumber105_105 },
-            //             { "direction", 0 },
-            //             { "startMove", lblNumber105_105.Top },
-            //             { "endMove", 15 },
-            //             { "moveStep", 10 },
-            //             { "backgroundWorkerId", 0 }
-            //         };
-            //         BACKGROUNDWORKERLABELMOVE0.RunWorkerAsync(labelMoveInfoDict1);
-
-            //         BACKGROUNDWORKERLABELMOVE0 = new BackgroundWorker()
-            //         {
-            //             WorkerReportsProgress = true,
-            //             WorkerSupportsCancellation = true,
-            //         };
-            //         BACKGROUNDWORKERLABELMOVE0.DoWork += BackgroundWorkerLabelMove_DoWork;
-            //         BACKGROUNDWORKERLABELMOVE0.ProgressChanged += BackgroundWorkerLabelMove_ProgressChanged;
-            //         BACKGROUNDWORKERLABELMOVE0.RunWorkerCompleted += BackgroundWorkerLabelMove_RunWorkerCompleted;
-            //         Dictionary<string, object> labelMoveInfoDict2 = new Dictionary<string, object>
-            //         {
-            //             { "labelMove", lblNumber195_195 },
-            //             { "direction", 0 },
-            //             { "startMove", lblNumber195_195.Top },
-            //             { "endMove", 15 },
-            //             { "moveStep", 10 },
-            //             { "backgroundWorkerId", 0 }
-            //         };
-            //         BACKGROUNDWORKERLABELMOVE0.RunWorkerAsync(labelMoveInfoDict2);
-            //     }
-            //     else if (e.KeyCode == Keys.Down || e.KeyCode == Keys.S)
-            //     {
-            //         KEYBOARDSTATE0 = 1;
-            //         KEYBOARDSTATE1 = 1;
-            //         KEYBOARDSTATE2 = 1;
-            //         KEYBOARDSTATE3 = 1;
-
-            //         BACKGROUNDWORKERLABELMOVE0 = new BackgroundWorker()
-            //         {
-            //             WorkerReportsProgress = true,
-            //             WorkerSupportsCancellation = true,
-            //         };
-            //         BACKGROUNDWORKERLABELMOVE0.DoWork += BackgroundWorkerLabelMove_DoWork;
-            //         BACKGROUNDWORKERLABELMOVE0.ProgressChanged += BackgroundWorkerLabelMove_ProgressChanged;
-            //         BACKGROUNDWORKERLABELMOVE0.RunWorkerCompleted += BackgroundWorkerLabelMove_RunWorkerCompleted;
-            //         Dictionary<string, object> labelMoveInfoDict1 = new Dictionary<string, object>
-            //         {
-            //             { "labelMove", lblNumber105_105 },
-            //             { "direction", 0 },
-            //             { "startMove", lblNumber105_105.Top },
-            //             { "endMove", 285 },
-            //             { "moveStep", 10 },
-            //             { "backgroundWorkerId", 0 }
-            //         };
-            //         BACKGROUNDWORKERLABELMOVE0.RunWorkerAsync(labelMoveInfoDict1);
-            //     }
-            //     else if (e.KeyCode == Keys.Left || e.KeyCode == Keys.A)
-            //     {
-            //         KEYBOARDSTATE0 = 1;
-            //         KEYBOARDSTATE1 = 1;
-            //         KEYBOARDSTATE2 = 1;
-            //         KEYBOARDSTATE3 = 1;
-
-            //         BACKGROUNDWORKERLABELMOVE0 = new BackgroundWorker()
-            //         {
-            //             WorkerReportsProgress = true,
-            //             WorkerSupportsCancellation = true,
-            //         };
-            //         BACKGROUNDWORKERLABELMOVE0.DoWork += BackgroundWorkerLabelMove_DoWork;
-            //         BACKGROUNDWORKERLABELMOVE0.ProgressChanged += BackgroundWorkerLabelMove_ProgressChanged;
-            //         BACKGROUNDWORKERLABELMOVE0.RunWorkerCompleted += BackgroundWorkerLabelMove_RunWorkerCompleted;
-            //         Dictionary<string, object> labelMoveInfoDict1 = new Dictionary<string, object>
-            //         {
-            //             { "labelMove", lblNumber105_105 },
-            //             { "direction", 1 },
-            //             { "startMove", lblNumber105_105.Left },
-            //             { "endMove", 15 },
-            //             { "moveStep", 10 },
-            //             { "backgroundWorkerId", 0 }
-            //         };
-            //         BACKGROUNDWORKERLABELMOVE0.RunWorkerAsync(labelMoveInfoDict1);
-            //     }
-            //     else if (e.KeyCode == Keys.Right || e.KeyCode == Keys.D)
-            //     {
-            //         KEYBOARDSTATE0 = 1;
-            //         KEYBOARDSTATE1 = 1;
-            //         KEYBOARDSTATE2 = 1;
-            //         KEYBOARDSTATE3 = 1;
-
-            //         BACKGROUNDWORKERLABELMOVE0 = new BackgroundWorker()
-            //         {
-            //             WorkerReportsProgress = true,
-            //             WorkerSupportsCancellation = true,
-            //         };
-            //         BACKGROUNDWORKERLABELMOVE0.DoWork += BackgroundWorkerLabelMove_DoWork;
-            //         BACKGROUNDWORKERLABELMOVE0.ProgressChanged += BackgroundWorkerLabelMove_ProgressChanged;
-            //         BACKGROUNDWORKERLABELMOVE0.RunWorkerCompleted += BackgroundWorkerLabelMove_RunWorkerCompleted;
-            //         Dictionary<string, object> labelMoveInfoDict1 = new Dictionary<string, object>
-            //         {
-            //             { "labelMove", lblNumber105_105 },
-            //             { "direction", 1 },
-            //             { "startMove", lblNumber105_105.Left },
-            //             { "endMove", 285 },
-            //             { "moveStep", 10 },
-            //             { "backgroundWorkerId", 0 }
-            //         };
-            //         BACKGROUNDWORKERLABELMOVE0.RunWorkerAsync(labelMoveInfoDict1);
-            //     }
-            // }
-            #endregion
+                    if (columnIndex > 0)
+                    {
+                        if (currentLabelNumber == afterCalculateLabelNumberArray[rowIndex][columnIndex - 1])
+                        {
+                            endGameState += 1;
+                        }
+                    }
+                    else
+                    {
+                        if (currentLabelNumber == afterCalculateLabelNumberArray[rowIndex][columnIndex + 1])
+                        {
+                            endGameState += 1;
+                        }
+                    }
+                }
+            }
+            // 1. 判断上下左右四个方位是否与当前值一致, 如果一致则说明还有可以合并的地方
+            // 2. 判断当前位置是否为空(0), 如果为空(0)则说明还可以继续创建新数字
+            if (endGameState == 0)
+            {
+                btnRestart.Show();
+            }
         }
 
+        /// <summary>
+        /// 函数 - 标签控件计算
+        /// </summary>
+        /// <param name="direction"></param>
+        /// <param name="labelArray"></param>
+        /// <returns></returns>
         private List<List<int>> LabelNumberCalculate(int direction, List<List<Label>> labelArray)
         {
             List<List<int>> resultLabelNumberArray = new List<List<int>> {
@@ -376,7 +257,7 @@ namespace Project_C_2048_Yogurtcry_20200806
                 new List<int> { 0, 0, 0, 0 }
             };
 
-            // Step 1 获取当前标签数字分布现状, 并且变更为可计算的方向
+            // Step 1 获取当前标签数字分布现状
             List<List<int>> currentLabelNumberArray = new List<List<int>> {
                 new List<int> { 0, 0, 0, 0 },
                 new List<int> { 0, 0, 0, 0 },
@@ -384,415 +265,188 @@ namespace Project_C_2048_Yogurtcry_20200806
                 new List<int> { 0, 0, 0, 0 }
             };
 
-            int calculateRowIndex;
-            int calculateColumnIndex;
-            calculateRowIndex = 0;
-            for (int columnIndex = 0; columnIndex <= 3; columnIndex++)
+            for (int rowIndex = 0; rowIndex <= 3; rowIndex ++)
             {
-                calculateColumnIndex = 0;
-                for (int rowIndex = 0; rowIndex <= 3; rowIndex++)
+                for (int columnIndex = 0; columnIndex <= 3; columnIndex ++)
                 {
                     int currentLabelNumber = int.Parse(labelArray[rowIndex][columnIndex].Text);
-                    currentLabelNumberArray[calculateRowIndex][calculateColumnIndex] = currentLabelNumber;
-                    calculateColumnIndex += 1;
+                    currentLabelNumberArray[rowIndex][columnIndex] = currentLabelNumber;
                 }
-                calculateRowIndex += 1;
             }
-            
-            // Step 2 输出结果计算
-            List<List<int>> calculateLabelNumberArray = new List<List<int>>();
-            for (int columnIndex = 0; columnIndex <= 3; columnIndex ++) {
-                // --> Step 2-1 去除空值
-                List<int> calculateLabelNumberList = new List<int>();
-                for (int rowIndex = 0; rowIndex <= 3; rowIndex ++) {
-                    int currentLabelNumber = currentLabelNumberArray[rowIndex][columnIndex];
-                    if (currentLabelNumber > 0) {
-                        calculateLabelNumberList.Add(currentLabelNumber);
-                    }
-                }
-                int calculateLabelNumberListCount = calculateLabelNumberList.Count;
-                for (int rowIndex = 0; rowIndex < (4 - calculateLabelNumberListCount); rowIndex++)
+
+            if (direction % 2 == 0)
+            {
+                #region 上下移动
+                int startIndex = 0;
+                int endIndex = 0;
+                if (direction == 0)
                 {
-                    calculateLabelNumberList.Add(0);
+                    startIndex = 0;
+                    endIndex = 3;
                 }
-                calculateLabelNumberArray.Add(calculateLabelNumberList);
-            }
-
-            // Step 3 旋转输出结果
-            int outputRowIndex;
-            int outputColumnIndex;
-            outputRowIndex = 0;
-            for (int columnIndex = 0; columnIndex <= 3; columnIndex++)
-            {
-                outputColumnIndex = 0;
-                for (int rowIndex = 0; rowIndex <= 3; rowIndex++)
+                else if (direction == 2)
                 {
-                    int currentLabelNumber = currentLabelNumberArray[rowIndex][columnIndex];
-                    resultLabelNumberArray[outputRowIndex][outputColumnIndex] = currentLabelNumber;
-                    outputColumnIndex += 1;
+                    startIndex = -3;
+                    endIndex = 0;
                 }
-                outputRowIndex += 1;
-            }
 
-            return resultLabelNumberArray;
-            // int startRowIndex = 0;
-            // int endRowIndex = 0;
-            // int startColumnIndex = 0;
-            // int endColumnIndex = 0;
-            
-            // switch (direction)
-            // {
-            //     case 0: // 上
-            //         startRowIndex = 0;
-            //         endRowIndex = 3;
-            //         startColumnIndex = 0;
-            //         endColumnIndex = 3;
-            //         break;
-            //     case 1: // 左
-            //         startRowIndex = 0;
-            //         endRowIndex = 3;
-            //         startColumnIndex = 0;
-            //         endColumnIndex = 3;
-            //         break;
-            //     case 2: // 下
-            //         startRowIndex = -3;
-            //         endRowIndex = 0;
-            //         startColumnIndex = 0;
-            //         endColumnIndex = 3;
-            //         break;
-            //     case 3: // 右
-            //         startRowIndex = 0;
-            //         endRowIndex = 3;
-            //         startColumnIndex = -3;
-            //         endColumnIndex = 0;
-            //         break;
-            // }
-
-            // int outputRowIndex = 0;
-            // int outputColumnIndex = 0;
-
-            // int resultRowIndex;
-            // int resultColumnIndex;
-
-            // resultRowIndex = 0;
-            // for (int rowIndex = startRowIndex; rowIndex <= endRowIndex; rowIndex ++) {
-            //     resultColumnIndex = 0;
-            //     for (int columnIndex = startColumnIndex; columnIndex <= endColumnIndex; columnIndex ++) {
-            //         if (direction % 2 == 0) {
-            //             outputRowIndex = Math.Abs(rowIndex);
-            //             outputColumnIndex = Math.Abs(columnIndex);
-            //         }
-            //         else
-            //         {
-            //             outputRowIndex = Math.Abs(columnIndex);
-            //             outputColumnIndex = Math.Abs(rowIndex);
-            //         }
-            //         int labelNumber = int.Parse(labelArray[outputRowIndex][outputColumnIndex].Text);
-            //         currentLabelNumberArray[resultRowIndex][resultColumnIndex] = labelNumber;
-            //         resultColumnIndex += 1;
-            //     }
-            //     resultRowIndex += 1;
-            // }
-
-            // // Step 2 输出结果计算
-            // List<List<int>> calculateLabelNumberArray = new List<List<int>>();
-            // for (int rowIndex = 0; rowIndex <= 3; rowIndex ++) {
-            //     // --> Step 2-1 去除空值
-            //     List<int> calculateLabelNumberList = new List<int>();
-            //     for (int columnIndex = 0; columnIndex <= 3; columnIndex ++) {
-            //         int currentLabelNumber = currentLabelNumberArray[rowIndex][columnIndex];
-            //         if (currentLabelNumber != 0) {
-            //             calculateLabelNumberList.Add(currentLabelNumber);
-            //         }
-            //     }
-            //     int calculateLabelNumberListCount = calculateLabelNumberList.Count;
-            //     for (int columnIndex = 0; columnIndex < (4 - calculateLabelNumberListCount); columnIndex++)
-            //     {
-            //         calculateLabelNumberList.Add(0);
-            //     }
-
-            //     // --> Step 2-2 合并同向值
-            //     for (int columnIndex = 0; columnIndex < 3; columnIndex++)
-            //     {
-            //         int currentLabelNumber = calculateLabelNumberList[columnIndex];
-            //         int nextLabelNumber = calculateLabelNumberList[columnIndex + 1];
-            //         if (currentLabelNumber == nextLabelNumber)
-            //         {
-            //             calculateLabelNumberList[columnIndex] = 2 * currentLabelNumber;
-            //             calculateLabelNumberList[columnIndex + 1] = 0;
-            //         }
-            //     }
-
-            //     // --> Step 2-3 去除空值
-            //     List<int> outputLabelNumberList = new List<int>();
-            //     for (int columnIndex = 0; columnIndex < calculateLabelNumberList.Count; columnIndex ++) {
-            //         int currentLabelNumber = calculateLabelNumberList[columnIndex];
-            //         if (currentLabelNumber != 0) {
-            //             outputLabelNumberList.Add(currentLabelNumber);
-            //         }
-            //     }
-            //     int outputLabelNumberListCount = outputLabelNumberList.Count;
-            //     for (int columnIndex = 0; columnIndex < (4 - outputLabelNumberListCount); columnIndex++)
-            //     {
-            //         outputLabelNumberList.Add(0);
-            //     }
-            //     calculateLabelNumberArray.Add(outputLabelNumberList);
-            // }
-
-            // // 旋转回输出的方向
-            // outputRowIndex = 0;
-            // for (int rowIndex = startRowIndex; rowIndex <= endRowIndex; rowIndex ++) {
-            //     outputColumnIndex = 0;
-            //     for (int columnIndex = startColumnIndex; columnIndex <= endColumnIndex; columnIndex ++) {
-            //         if (direction % 2 == 0) {
-            //             resultRowIndex = Math.Abs(rowIndex);
-            //             resultColumnIndex = Math.Abs(columnIndex);
-            //         }
-            //         else
-            //         {
-            //             resultRowIndex = Math.Abs(columnIndex);
-            //             resultColumnIndex = Math.Abs(rowIndex);
-            //         }
-            //         // int labelNumber = currentLabelNumberArray[outputRowIndex][outputColumnIndex];
-            //         int labelNumber = calculateLabelNumberArray[outputRowIndex][3 - outputColumnIndex];
-            //         resultLabelNumberArray[resultRowIndex][resultColumnIndex] = labelNumber;
-            //         outputColumnIndex += 1;
-            //     }
-            //     outputRowIndex += 1;
-            // }
-        }
-
-        #region 多线程 - 标签控件放大
-        private void BACKGROUNDWORKERLABELNEWNUMBER_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            Dictionary<string, object> labelNewNumberSizeChangeDict = (Dictionary<string, object>)e.Result;
-            if (labelNewNumberSizeChangeDict != null)
-            {
-                BackgroundWorker backgroundWorkerSizeChange = new BackgroundWorker(){
-                    WorkerReportsProgress = true,
-                    WorkerSupportsCancellation = true,
-                };
-                backgroundWorkerSizeChange.DoWork += BackgroundWorkerSizeChange_DoWork;
-                backgroundWorkerSizeChange.ProgressChanged += BackgroundWorkerSizeChange_ProgressChanged;
-                backgroundWorkerSizeChange.RunWorkerCompleted += BackgroundWorkerSizeChange_RunWorkerCompleted;
-                backgroundWorkerSizeChange.RunWorkerAsync(labelNewNumberSizeChangeDict);
-            }
-            else
-            {
-                KEYBOARDSTATEFULL = 0;
-            }
-            ((BackgroundWorker)sender).Dispose();
-        }
-
-        private void BACKGROUNDWORKERLABELNEWNUMBER_ProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-            Dictionary<string, object> labelNewNumberChangeInfoDict = (Dictionary<string, object>)e.UserState;
-            Label labelDemo = (Label)labelNewNumberChangeInfoDict["labelDemo"];
-            Panel PnlGameArea = (Panel)labelNewNumberChangeInfoDict["pnlGameArea"];
-            int newNumber = (int)labelNewNumberChangeInfoDict["newNumber"];
-            Label newLabel = (Label)labelNewNumberChangeInfoDict["newLabel"];
-
-            PnlGameArea.Controls.Add(newLabel);
-            newLabel.BringToFront();
-        }
-
-        private void BACKGROUNDWORKERLABELNEWNUMBER_DoWork(object sender, DoWorkEventArgs e)
-        {
-            Dictionary<string, object> labelNewNumberInfoDict = (Dictionary<string, object>)e.Argument;
-            List<List<int>> usedNumberArray = (List<List<int>>)labelNewNumberInfoDict["usedNumberArray"];
-            Panel PnlGameArea = (Panel)labelNewNumberInfoDict["pnlGameArea"];
-            
-            // 获取未使用的坐标
-            List<List<int>> usableNumberRCList = new List<List<int>>();
-            for (int rowIndex = 0; rowIndex < 4; rowIndex++)
-            {
-                for (int columnIndex = 0; columnIndex < 4; columnIndex++)
+                // Step 2 输出结果计算
+                List<List<int>> calculateLabelNumberArray = new List<List<int>>();
+                for (int columnIndex = 0; columnIndex <= 3; columnIndex ++)
                 {
-                    int useState = usedNumberArray[rowIndex][columnIndex];
-                    if (useState == 0)
+                    // --> Step 2-1 去除空值
+                    List<int> calculateLabelNumberList = new List<int>();
+                    for (int rowIndex = startIndex; rowIndex <= endIndex; rowIndex ++) // 变了。上: rowIndex = 0 <=3 ++
                     {
-                        usableNumberRCList.Add(new List<int> { rowIndex, columnIndex });
+                        int currentLabelNumber = currentLabelNumberArray[Math.Abs(rowIndex)][Math.Abs(columnIndex)];
+                        if (currentLabelNumber > 0) {
+                            calculateLabelNumberList.Add(currentLabelNumber);
+                        }
                     }
+                    int calculateLabelNumberListCount = calculateLabelNumberList.Count;
+                    for (int rowIndex = 0; rowIndex < (4 - calculateLabelNumberListCount); rowIndex++)
+                    {
+                        calculateLabelNumberList.Add(0);
+                    }
+
+                    // --> Step 2-2 合并同向值
+                    for (int rowIndex = 0; rowIndex <= 2; rowIndex ++)
+                    {
+                        int currentLabelNumber = calculateLabelNumberList[rowIndex];
+                        int lastLabelNumber = calculateLabelNumberList[rowIndex + 1];
+                        if (currentLabelNumber == lastLabelNumber)
+                        {
+                            calculateLabelNumberList[rowIndex] = currentLabelNumber * 2;
+                            calculateLabelNumberList[rowIndex + 1] = 0;
+                        }
+                    }
+
+                    // --> Step 2-3 去除合并后的空值
+                    List<int> cleanCalculateLabelNumberList = new List<int>();
+                    for (int rowIndex = 0; rowIndex <= 3; rowIndex ++) {
+                        int currentLabelNumber = calculateLabelNumberList[rowIndex];
+                        if (currentLabelNumber > 0) {
+                            cleanCalculateLabelNumberList.Add(currentLabelNumber);
+                        }
+                    }
+                    int cleanCalculateLabelNumberListCount = cleanCalculateLabelNumberList.Count;
+                    for (int rowIndex = 0; rowIndex < (4 - cleanCalculateLabelNumberListCount); rowIndex++)
+                    {
+                        cleanCalculateLabelNumberList.Add(0);
+                    }
+
+                    calculateLabelNumberArray.Add(cleanCalculateLabelNumberList);
                 }
-            }
 
-            // 随机提取一个坐标
-            Random random = new Random();
-            int usableNumberRCListCount = usableNumberRCList.Count;
-            int usableIndex = 0;
-            int usableNumberRowIndex = 0;
-            int usableNumberColumnIndex = 0;
-            if (usableNumberRCListCount > 0)
-            {
-                usableIndex = random.Next(0, usableNumberRCListCount);
-                List<int> usableNumberRC = usableNumberRCList[usableIndex];
-                usableNumberRowIndex = usableNumberRC[0];
-                usableNumberColumnIndex = usableNumberRC[1];
-
-                // 随机生成一个数字
-                int randomNumber = random.Next(0, 99);
-                int newNumber = 0;
-                if (randomNumber <= 60)
+                // Step 3 旋转输出结果
+                int outputRowIndex;
+                int outputColumnIndex;
+                outputRowIndex = 0;
+                for (int columnIndex = startIndex; columnIndex <= endIndex; columnIndex ++)  // 变了 上: columnIndex = 0 <=3 ++
                 {
-                    newNumber = 2;
-                }
-                else
-                {
-                    newNumber = 4;
+                    outputColumnIndex = 0;
+                    for (int rowIndex = 0; rowIndex <= 3; rowIndex ++)
+                    {
+                        int calculateLabelNumber = calculateLabelNumberArray[rowIndex][Math.Abs(columnIndex)];
+                        resultLabelNumberArray[outputRowIndex][outputColumnIndex] = calculateLabelNumber;
+                        outputColumnIndex += 1;
+                    }
+                    outputRowIndex += 1;
                 }
 
-                // 数字样式
-                Dictionary<string, object> numberLabelStyle = ClassCalculate.GetNumberLabelStyle(newNumber);
-                Font font = (Font)numberLabelStyle["font"];
-                Color foreColor = (Color)numberLabelStyle["foreColor"];
-                Color backColor = (Color)numberLabelStyle["backColor"];
-
-                // 创建新标签
-                Label labelDemo = LABELARRAY[usableNumberRowIndex][usableNumberColumnIndex];
-                Label newLabel = new Label
-                {
-                    Width = 0,
-                    Height = 0,
-                    Left = labelDemo.Left + labelDemo.Width / 2,
-                    Top = labelDemo.Top + labelDemo.Height / 2,
-                    Font = font,
-                    BackColor = backColor,
-                    ForeColor = foreColor,
-                    TextAlign = ContentAlignment.MiddleCenter,
-                    Text = newNumber.ToString(),
-                    Name = String.Format("lblNumber{0}_{1}", Left, Top)
-                };
-
-                Dictionary<string, object> labelNewNumberSizeChangeDict = new Dictionary<string, object>
-                {
-                    { "newLabel", newLabel },
-                    { "labelDemo", labelDemo },
-                    { "sizeIndex", -1 }
-                };
-                e.Result = labelNewNumberSizeChangeDict;
-
-                Dictionary<string, object> labelNewNumberChangeInfoDict = new Dictionary<string, object>{
-                    { "labelDemo", labelDemo },
-                    { "pnlGameArea", PnlGameArea },
-                    { "newNumber", newNumber },
-                    { "newLabel", newLabel }
-                };
-                ((BackgroundWorker)sender).ReportProgress(1, labelNewNumberChangeInfoDict);
-            }
-        }
-
-        private void BackgroundWorkerSizeChange_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            KEYBOARDSTATEFULL = 0;
-            ((BackgroundWorker)sender).Dispose();
-        }
-
-        private void BackgroundWorkerSizeChange_ProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-            Dictionary<string, object> labelNewNumberSizeChangeDict = (Dictionary<string, object>)e.UserState;
-            Label newLabel = (Label)labelNewNumberSizeChangeDict["newLabel"];
-            Label labelDemo = (Label)labelNewNumberSizeChangeDict["labelDemo"];
-            int sizeIndex = (int)labelNewNumberSizeChangeDict["sizeIndex"];
-
-            newLabel.Width = sizeIndex;
-            newLabel.Height = sizeIndex;
-            newLabel.Left = (2 * labelDemo.Left + labelDemo.Width - sizeIndex) / 2;
-            newLabel.Top = (2 * labelDemo.Top + labelDemo.Height - sizeIndex) / 2;
-        }
-
-        private void BackgroundWorkerSizeChange_DoWork(object sender, DoWorkEventArgs e)
-        {
-            Dictionary<string, object> labelNewNumberSizeChangeDict = (Dictionary<string, object>)e.Argument;
-            Label newLabel = (Label)labelNewNumberSizeChangeDict["newLabel"];
-            Label labelDemo = (Label)labelNewNumberSizeChangeDict["labelDemo"];
-            
-            for (int sizeIndex = 0; sizeIndex <= labelDemo.Width; sizeIndex += 2)
-            {
-                labelNewNumberSizeChangeDict["sizeIndex"] = sizeIndex;
-                Thread.Sleep(2);
-                ((BackgroundWorker)sender).ReportProgress(1, labelNewNumberSizeChangeDict);
-            }
-        }
-        #endregion
-
-        #region 多线程 - 标签控件移动
-        private void BackgroundWorkerLabelMove_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            int backgroundWorkerId = int.Parse(e.Result.ToString());
-            switch (backgroundWorkerId)
-            {
-                case 0:
-                    KEYBOARDSTATE0 = 0;
-                    break;
-                case 1:
-                    KEYBOARDSTATE1 = 0;
-                    break;
-                case 2:
-                    KEYBOARDSTATE2 = 0;
-                    break;
-                case 3:
-                    KEYBOARDSTATE3 = 0;
-                    break;
-            }
-            KEYBOARDSTATE0 = 0;
-            KEYBOARDSTATE1 = 0;
-            KEYBOARDSTATE2 = 0;
-            KEYBOARDSTATE3 = 0;
-
-            ((BackgroundWorker)sender).Dispose();
-        }
-
-        private void BackgroundWorkerLabelMove_ProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-            Dictionary<string, Object> labelMoveIndexInfoDict = (Dictionary<string, Object>)e.UserState;
-            int direction = (int)labelMoveIndexInfoDict["direction"];
-            Label labelMove = (Label)labelMoveIndexInfoDict["labelMove"];
-            int moveIndex = (int)labelMoveIndexInfoDict["moveIndex"];
-
-            if (direction == 0)
-            {
-                // 当移动方向为 0 时, 表示上下移动
-                labelMove.Top = moveIndex;
-            }
+                return resultLabelNumberArray;
+                #endregion
+            } 
             else
             {
-                // 当移动方向为 1 时, 表示左右移动
-                labelMove.Left = moveIndex;
-            }
+                #region 左右移动
+                int startIndex = 0;
+                int endIndex = 0;
+                if (direction == 1)
+                {
+                    startIndex = 0;
+                    endIndex = 3;
+                }
+                else if (direction == 3)
+                {
+                    startIndex = -3;
+                    endIndex = 0;
+                }
 
-            lblGameScore.Text = moveIndex.ToString();
+                // Step 2 输出结果计算
+                List<List<int>> calculateLabelNumberArray = new List<List<int>>();
+                for (int rowIndex = 0; rowIndex <= 3; rowIndex ++)
+                {
+                    // --> Step 2-1 去除空值
+                    List<int> calculateLabelNumberList = new List<int>();
+                    for (int columnIndex = startIndex; columnIndex <= endIndex; columnIndex ++) // 变了。上: rowIndex = 0 <=3 ++  左: columnIndex = 0 <=3 ++
+                    {
+                        int currentLabelNumber = currentLabelNumberArray[Math.Abs(rowIndex)][Math.Abs(columnIndex)];
+                        if (currentLabelNumber > 0) {
+                            calculateLabelNumberList.Add(currentLabelNumber);
+                        }
+                    }
+                    int calculateLabelNumberListCount = calculateLabelNumberList.Count;
+                    for (int columnIndex = 0; columnIndex < (4 - calculateLabelNumberListCount); columnIndex++)
+                    {
+                        calculateLabelNumberList.Add(0);
+                    }
+
+                    // --> Step 2-2 合并同向值
+                    for (int columnIndex = 0; columnIndex <= 2; columnIndex ++)
+                    {
+                        int currentLabelNumber = calculateLabelNumberList[columnIndex];
+                        int lastLabelNumber = calculateLabelNumberList[columnIndex + 1];
+                        if (currentLabelNumber == lastLabelNumber)
+                        {
+                            calculateLabelNumberList[columnIndex] = currentLabelNumber * 2;
+                            calculateLabelNumberList[columnIndex + 1] = 0;
+                        }
+                    }
+
+                    // --> Step 2-3 去除合并后的空值
+                    List<int> cleanCalculateLabelNumberList = new List<int>();
+                    for (int columnIndex = 0; columnIndex <= 3; columnIndex ++) {
+                        int currentLabelNumber = calculateLabelNumberList[columnIndex];
+                        if (currentLabelNumber > 0) {
+                            cleanCalculateLabelNumberList.Add(currentLabelNumber);
+                        }
+                    }
+                    int cleanCalculateLabelNumberListCount = cleanCalculateLabelNumberList.Count;
+                    for (int columnIndex = 0; columnIndex < (4 - cleanCalculateLabelNumberListCount); columnIndex++)
+                    {
+                        cleanCalculateLabelNumberList.Add(0);
+                    }
+
+                    calculateLabelNumberArray.Add(cleanCalculateLabelNumberList);
+                }
+
+                // Step 3 旋转输出结果
+                int outputRowIndex;
+                int outputColumnIndex;
+                outputRowIndex = 0;
+                for (int rowIndex = 0; rowIndex <= 3; rowIndex ++)  // 变了 上: columnIndex = 0 <=3 ++
+                {
+                    outputColumnIndex = 0;
+                    for (int columnIndex = startIndex; columnIndex <= endIndex; columnIndex ++) // 变了 左: columnIndex = 0 <=3 ++
+                    {
+                        int calculateLabelNumber = calculateLabelNumberArray[rowIndex][Math.Abs(columnIndex)];
+                        resultLabelNumberArray[outputRowIndex][outputColumnIndex] = calculateLabelNumber;
+                        outputColumnIndex += 1;
+                    }
+                    outputRowIndex += 1;
+                }
+
+                return resultLabelNumberArray;
+                #endregion
+            }
         }
 
-        private void BackgroundWorkerLabelMove_DoWork(object sender, DoWorkEventArgs e)
+        private void BtnRestart_Click(object sender, EventArgs e)
         {
-            Dictionary<string, object> labelMoveInfoDict = (Dictionary<string, object>)e.Argument;
-            Label labelMove = (Label)labelMoveInfoDict["labelMove"];
-            int direction = (int)labelMoveInfoDict["direction"];
-            int startMove = (int)labelMoveInfoDict["startMove"];
-            int endMove = (int)labelMoveInfoDict["endMove"];
-            int moveStep = (int)labelMoveInfoDict["moveStep"];
-            int backgroundWorkerId = (int)labelMoveInfoDict["backgroundWorkerId"];
-
-            e.Result = backgroundWorkerId;
-
-            // 当『起始移动位置』大于『终止移动位置』时, 表示移动方向为反向移动
-            if (startMove > endMove)
-            {
-               startMove = -startMove;
-               endMove = -endMove;
-            }
-
-            for (int moveIndex = startMove; moveIndex <= endMove; moveIndex += moveStep)
-            {
-                Dictionary<string, Object> labelMoveIndexInfoDict = new Dictionary<string, Object> {
-                    { "direction", direction },
-                    { "labelMove", labelMove },
-                    { "moveIndex", Math.Abs(moveIndex) },
-                };
-                Thread.Sleep(5);
-                ((BackgroundWorker)sender).ReportProgress(1, labelMoveIndexInfoDict);
-            }
+            FrmMain_Load(null, null);
+            RefleshCalculate(RandomNewNumberTwoOrFour());
+            ((Button)sender).Hide();
         }
-        #endregion
     }
 }
